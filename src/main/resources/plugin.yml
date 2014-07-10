@@ -1,0 +1,3 @@
+name: mbax-t3
+main: com.tenjava.entries.mbax.t3.TenJava
+version: '${project.version}'
