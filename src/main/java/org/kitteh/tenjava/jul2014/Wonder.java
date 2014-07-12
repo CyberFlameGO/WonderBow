@@ -23,6 +23,7 @@
  */
 package org.kitteh.tenjava.jul2014;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -31,8 +32,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -90,7 +93,7 @@ final class Wonder<T extends Entity> {
         cow.getLocation().add(0, 1, 0).getBlock().setType(Material.WATER);
         cow.remove();
     }));
-    private static final Wonder<Arrow> ARROW = new Wonder<>(Arrow.class, 1, arrow -> particles().addEffect(ParticleTimer.Particle.SPELL, arrow, -1, 1, no()), arrow -> {
+    private static final Wonder<Arrow> ARROW = new Wonder<>(Arrow.class, 2, arrow -> particles().addEffect(ParticleTimer.Particle.SPELL, arrow, -1, 1, no()), arrow -> {
         Set<Player> nearbyPlayers = arrow.getNearbyEntities(5, 5, 5).stream().filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toSet());
         if (!nearbyPlayers.isEmpty() && arrow.hasMetadata("WonderShooter")) {
             ItemStack shooter = (ItemStack) arrow.getMetadata("WonderShooter").get(0).value();
@@ -116,6 +119,25 @@ final class Wonder<T extends Entity> {
         }
         nearbyPlayers.forEach(player -> player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 4, true)));
         arrow.remove();
+    });
+    private static final Wonder<Egg> EGG = new Wonder<>(Egg.class, 1, egg -> particles().addEffect(ParticleTimer.Particle.RED, egg, -1, 1, no()), egg -> {
+        Set<Chicken> chicks = new HashSet<>();
+        for (int i = 0; i < 30; i++) {
+            Chicken chick = egg.getWorld().spawn(egg.getLocation(), Chicken.class);
+            chicks.add(chick);
+            chick.setVelocity(new Vector(RANDOM.nextFloat() * 0.4, RANDOM.nextFloat() * 1.5, RANDOM.nextFloat() * 0.4));
+        }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(JavaPlugin.getPlugin(WonderBow.class), new Runnable() {
+            @Override
+            public void run() {
+                for (Chicken chicken : chicks) {
+                    if (chicken.isValid()) {
+                        chicken.remove();
+                        particles().broadcastEffect(ParticleTimer.Particle.LAVA.toString(), chicken.getLocation(), 0, 20);
+                    }
+                }
+            }
+        }, 40);
     });
 
     /**

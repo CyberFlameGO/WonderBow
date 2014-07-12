@@ -45,3 +45,4 @@ BOW FEATURES
 * WITHER BLAST (with record keeping! Check your item after a successful hit on another player!)
 * CONFUSION ARROW (with record keeping! Check your item after a successful hit on another player!)
 * ENDER PEARL OF NO SPECIAL EFFECTS! Impress your enemies by teleporting right on top of them!
+* EGGSPLOSION

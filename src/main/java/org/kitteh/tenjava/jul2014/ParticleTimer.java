@@ -39,8 +39,10 @@ final class ParticleTimer {
     public enum Particle {
         ANGRY_VILLAGER("angryVillager"),
         HEART("heart", 10, 0),
+        LAVA("lava", 20, 0),
+        RED("reddust", 10, 0),
         SPELL("spell", 50, 5),
-        SPLASH("splash", 5, 0);
+        SPLASH("splash", 10, 0.2F);
 
         private final int count;
         private final float data;
@@ -141,11 +143,12 @@ final class ParticleTimer {
         this.tracking.add(new ParticleTrack<>(entity, count, frequency, particle, callback));
     }
 
+    // Offset generation
     private float off() {
         return random.nextFloat() * 2 + 1;
     }
 
-    private void broadcastEffect(String name, Location location, float data, int count) {
+    public void broadcastEffect(String name, Location location, float data, int count) {
         PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(name, (float) location.getX(), (float) location.getY(), (float) location.getZ(), off(), off(), off(), data, count);
         for (Player player : this.plugin.getServer().getOnlinePlayers()) {
             if (player.getWorld().equals(location.getWorld()) && player.getLocation().distanceSquared(location) < (100 * 100)) {
