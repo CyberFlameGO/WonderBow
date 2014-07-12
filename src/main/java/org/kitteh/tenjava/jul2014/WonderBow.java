@@ -33,7 +33,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Arrays;
 import java.util.List;
 
-public class WonderBow extends JavaPlugin {
+public final class WonderBow extends JavaPlugin {
     private ItemMeta metaBow;
     private ItemMeta metaArrow;
     private ParticleTimer particles;

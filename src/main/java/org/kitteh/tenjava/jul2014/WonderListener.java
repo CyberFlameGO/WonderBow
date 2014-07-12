@@ -35,7 +35,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.Vector;
 
-class WonderListener implements Listener {
+final class WonderListener implements Listener {
     private static final String WONDERMETA = "WonderBow";
     private static final String WONDERSHOOTER = "WonderShooter";
     private final WonderBow plugin;

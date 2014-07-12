@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class WonderTest {
+public final class WonderTest {
     @Test
     public void weight() throws IllegalAccessException {
         Set<String> underweight = Arrays.stream(Wonder.class.getDeclaredFields()).filter(field -> field.getType().equals(Wonder.class)).filter(field -> {
