@@ -35,10 +35,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
-public class ParticleTimer {
+final class ParticleTimer {
     public enum Particle {
         ANGRY_VILLAGER("angryVillager"),
-        SPLASH("splash");
+        SPELL("spell", 50, 5),
+        SPLASH("splash", 5, 0);
 
         private final int count;
         private final float data;

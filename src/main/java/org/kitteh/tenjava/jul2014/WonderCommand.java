@@ -47,6 +47,7 @@ public final class WonderCommand implements TabExecutor {
                 switch (args[0]) {
                     case "craft":
                         player.getInventory().addItem(this.plugin.getNewWonderBow(player.getName()));
+                        player.getInventory().addItem(this.plugin.getNewWonderBro());
                         sender.sendMessage(ChatColor.AQUA + "WonderBow granted!");
                         break;
                     case "test":

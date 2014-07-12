@@ -44,22 +44,23 @@ import java.util.stream.Collectors;
  *
  * @param <T> Entity type of this particular Wonder
  */
-class Wonder<T extends Entity> {
+final class Wonder<T extends Entity> {
     private static final Random RANDOM = new Random();
     private static final List<Wonder<? extends Entity>> WONDERS = new ArrayList<>();
     private static final String MOST_WITHERED = ChatColor.GOLD + "Most Withered: ";
+    private static final String MOST_CONFUSED = ChatColor.GOLD + "Most Confused: ";
 
     private static ParticleTimer particles() {
         return JavaPlugin.getPlugin(WonderBow.class).getParticleTimer();
     }
 
-    private static final Wonder<Chicken> CHICKEN = new Wonder<>(Chicken.class, chicken -> particles().addEffect(ParticleTimer.Particle.ANGRY_VILLAGER, chicken, 10, 5, bawk -> {
+    private static final Wonder<Chicken> CHICKEN = new Wonder<>(Chicken.class, 1, chicken -> particles().addEffect(ParticleTimer.Particle.ANGRY_VILLAGER, chicken, 10, 5, bawk -> {
         bawk.getWorld().strikeLightning(bawk.getLocation());
         bawk.remove();
     }), no());
-    private static final Wonder<EnderPearl> ENDERS = new Wonder<>(EnderPearl.class);
-    private static final Wonder<WitherSkull> SKULL = new Wonder<>(WitherSkull.class, no(), skull -> {
-        Set<LivingEntity> nearbyPlayers = skull.getNearbyEntities(3, 3, 3).stream().filter(e -> e instanceof LivingEntity).map(e -> (LivingEntity) e).collect(Collectors.toSet());
+    private static final Wonder<EnderPearl> ENDERS = new Wonder<>(EnderPearl.class, 1); // BAD LUCK EH
+    private static final Wonder<WitherSkull> SKULL = new Wonder<>(WitherSkull.class, 1, no(), skull -> {
+        Set<Player> nearbyPlayers = skull.getNearbyEntities(3, 3, 3).stream().filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toSet());
         if (!nearbyPlayers.isEmpty() && skull.hasMetadata("WonderShooter")) {
             ItemStack shooter = (ItemStack) skull.getMetadata("WonderShooter").get(0).value();
             ItemMeta meta = shooter.getItemMeta();
@@ -84,12 +85,38 @@ class Wonder<T extends Entity> {
         }
         nearbyPlayers.forEach(player -> player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 200, 1, true)));
     });
-    private static final Wonder<Fireball> FIRE = new Wonder<>(Fireball.class, no(), fireball -> particles().addEffect(ParticleTimer.Particle.SPLASH, fireball.getWorld().spawn(fireball.getLocation(), Cow.class), 40, 1, cow -> {
+    private static final Wonder<Fireball> FIRE = new Wonder<>(Fireball.class, 1, no(), fireball -> particles().addEffect(ParticleTimer.Particle.SPLASH, fireball.getWorld().spawn(fireball.getLocation(), Cow.class), 40, 1, cow -> {
         cow.getWorld().createExplosion(cow.getLocation().getX(), cow.getLocation().getY(), cow.getLocation().getZ(), 3, false, false);
         cow.getLocation().add(0, 1, 0).getBlock().setType(Material.WATER);
         cow.remove();
     }));
-    private static final Wonder<Arrow> ARROW = new Wonder<>(Arrow.class); // Boring!
+    private static final Wonder<Arrow> ARROW = new Wonder<>(Arrow.class, 1, arrow -> particles().addEffect(ParticleTimer.Particle.SPELL, arrow, -1, 1, no()), arrow -> {
+        Set<Player> nearbyPlayers = arrow.getNearbyEntities(5, 5, 5).stream().filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toSet());
+        if (!nearbyPlayers.isEmpty() && arrow.hasMetadata("WonderShooter")) {
+            ItemStack shooter = (ItemStack) arrow.getMetadata("WonderShooter").get(0).value();
+            ItemMeta meta = shooter.getItemMeta();
+            List<String> lore = meta.getLore();
+            boolean set = false;
+            for (int i = 0; i < lore.size(); i++) {
+                String string = lore.get(i);
+                if (string.startsWith(MOST_CONFUSED)) {
+                    int count = Integer.parseInt(string.substring((MOST_CONFUSED).length()));
+                    if (count < nearbyPlayers.size()) {
+                        lore.set(i, MOST_CONFUSED + nearbyPlayers.size());
+                    }
+                    set = true;
+                    break;
+                }
+            }
+            if (!set) {
+                lore.add(MOST_CONFUSED + nearbyPlayers.size());
+            }
+            meta.setLore(lore);
+            shooter.setItemMeta(meta);
+        }
+        nearbyPlayers.forEach(player -> player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 4, true)));
+        arrow.remove();
+    });
 
     /**
      * Generates a consumer which does nothing.
@@ -114,16 +141,20 @@ class Wonder<T extends Entity> {
     private final Consumer<T> processHit;
     private final Consumer<T> processSpawn;
     private final Class<T> entityClass;
+    private final int weight;
 
-    private Wonder(Class<T> entityClass) {
-        this(entityClass, no(), no());
+    private Wonder(Class<T> entityClass, int weight) {
+        this(entityClass, weight, no(), no());
     }
 
-    private Wonder(Class<T> entityClass, Consumer<T> processSpawn, Consumer<T> processHit) {
+    private Wonder(Class<T> entityClass, int weight, Consumer<T> processSpawn, Consumer<T> processHit) {
         this.processHit = processHit;
         this.processSpawn = processSpawn;
         this.entityClass = entityClass;
-        WONDERS.add(this);
+        this.weight = weight;
+        for (int i = 0; i < weight; i++) {
+            WONDERS.add(this);
+        }
     }
 
     /**
@@ -151,5 +182,14 @@ class Wonder<T extends Entity> {
      */
     void onSpawn(T entity) {
         this.processSpawn.accept(entity);
+    }
+
+    /**
+     * Gets the weight of this Wonder.
+     *
+     * @return weight
+     */
+    public int getWeight() {
+        return this.weight;
     }
 }

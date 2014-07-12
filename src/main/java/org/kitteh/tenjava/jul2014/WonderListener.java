@@ -53,6 +53,7 @@ class WonderListener implements Listener {
                 event.setCancelled(true);
                 projectile = this.spawnWonder(wonder, projectile, (Player) event.getEntity());
             }
+            wonder.onSpawn(projectile);
             projectile.setMetadata(WONDERMETA, new FixedMetadataValue(this.plugin, wonder));
             projectile.setMetadata(WONDERSHOOTER, new FixedMetadataValue(this.plugin, ((Player) event.getEntity()).getItemInHand()));
         }
@@ -77,7 +78,6 @@ class WonderListener implements Listener {
             newProjectile = shooter.getWorld().spawn(newLocation, wonder.getEntityClass());
             newProjectile.setVelocity(projectile.getVelocity());
         }
-        wonder.onSpawn(newProjectile);
         return newProjectile;
     }
 

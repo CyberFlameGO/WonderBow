@@ -35,6 +35,7 @@ import java.util.List;
 
 public class WonderBow extends JavaPlugin {
     private ItemMeta metaBow;
+    private ItemMeta metaArrow;
     private ParticleTimer particles;
 
     @Override
@@ -48,6 +49,9 @@ public class WonderBow extends JavaPlugin {
         this.metaBow.setDisplayName(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "WonderBow!");
         this.metaBow.setLore(Arrays.asList(ChatColor.DARK_AQUA + "It's a WonderBow!", "", ChatColor.DARK_AQUA + "Its effects are a mystery"));
         this.metaBow.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+
+        this.metaArrow = this.getServer().getItemFactory().getItemMeta(Material.ARROW);
+        this.metaArrow.setDisplayName(ChatColor.LIGHT_PURPLE+"WonderBow's WonderBro");
     }
 
     /**
@@ -74,6 +78,12 @@ public class WonderBow extends JavaPlugin {
         ItemStack bow = new ItemStack(Material.BOW);
         bow.setItemMeta(this.getNewMeta(creator));
         return bow;
+    }
+
+    public ItemStack getNewWonderBro() {
+        ItemStack arrow = new ItemStack(Material.ARROW);
+        arrow.setItemMeta(this.metaArrow);
+        return arrow;
     }
 
     /**
