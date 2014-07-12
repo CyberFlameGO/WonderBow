@@ -129,17 +129,10 @@ final class Wonder<T extends Entity> {
             chicks.add(chick);
             chick.setVelocity(new Vector(RANDOM.nextFloat() * 0.4, RANDOM.nextFloat() * 1.5, RANDOM.nextFloat() * 0.4));
         }
-        Bukkit.getScheduler().scheduleSyncDelayedTask(JavaPlugin.getPlugin(WonderBow.class), new Runnable() {
-            @Override
-            public void run() {
-                for (Chicken chicken : chicks) {
-                    if (chicken.isValid()) {
-                        chicken.remove();
-                        particles().broadcastEffect(ParticleTimer.Particle.LAVA.toString(), chicken.getLocation(), 0, 20);
-                    }
-                }
-            }
-        }, 40);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(JavaPlugin.getPlugin(WonderBow.class), () -> chicks.stream().filter(Entity::isValid).forEach(chicken -> {
+            chicken.remove();
+            particles().broadcastEffect(ParticleTimer.Particle.LAVA.toString(), chicken.getLocation(), 0, 20);
+        }), 40);
     });
 
     /**
