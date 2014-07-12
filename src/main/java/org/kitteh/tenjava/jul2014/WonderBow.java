@@ -51,7 +51,7 @@ public class WonderBow extends JavaPlugin {
         this.metaBow.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
 
         this.metaArrow = this.getServer().getItemFactory().getItemMeta(Material.ARROW);
-        this.metaArrow.setDisplayName(ChatColor.LIGHT_PURPLE+"WonderBow's WonderBro");
+        this.metaArrow.setDisplayName(ChatColor.LIGHT_PURPLE + "WonderBow's WonderBro");
     }
 
     /**
