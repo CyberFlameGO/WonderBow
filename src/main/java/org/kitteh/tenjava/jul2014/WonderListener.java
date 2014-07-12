@@ -37,6 +37,7 @@ import org.bukkit.util.Vector;
 
 class WonderListener implements Listener {
     private static final String WONDERMETA = "WonderBow";
+    private static final String WONDERSHOOTER = "WonderShooter";
     private final WonderBow plugin;
 
     WonderListener(WonderBow plugin) {
@@ -53,6 +54,7 @@ class WonderListener implements Listener {
                 projectile = this.spawnWonder(wonder, projectile, (Player) event.getEntity());
             }
             projectile.setMetadata(WONDERMETA, new FixedMetadataValue(this.plugin, wonder));
+            projectile.setMetadata(WONDERSHOOTER, new FixedMetadataValue(this.plugin, ((Player) event.getEntity()).getItemInHand()));
         }
     }
 

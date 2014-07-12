@@ -39,9 +39,7 @@ import java.util.function.Consumer;
 public class ParticleTimer {
     public enum Particle {
         ANGRY_VILLAGER("angryVillager"),
-        BUBBLE("bubble"),
-        SPLASH("splash"),
-        WAKE("wake"),;
+        SPLASH("splash");
 
         private final int count;
         private final float data;
