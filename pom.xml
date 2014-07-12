@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.tenjava.entries.mbax.t3</groupId> <!-- you're welcome to change this -->
-	<artifactId>mbax-t3</artifactId>
+	<groupId>org.kitteh.tenjava</groupId>
+	<artifactId>tenjava-july-2014</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ten.java 2014 July</name>
-	<description>Contest entry for ten.java 2014 July</description>
+	<name>CAT_PLUGIN</name>
+	<description>mbaxter's July 2014 ten.java plugin</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,17 +29,15 @@
 
 	<build>
 		<defaultGoal>clean package</defaultGoal>
-		<finalName>${project.artifactId}</finalName>
+		<finalName>mbaxter_tenjava</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<!-- Per the rules at http://git.io/lAJgzQ, you're free to change
-					     "1.6" to "1.7" or "1.8" if you wish. This will not impact your score. -->
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -52,7 +50,6 @@
 					<include>*</include>
 				</includes>
 			</resource>
-			<!-- Uncomment to include files (example is LICENSE file) from the project root
 			<resource>
 				<targetPath>.</targetPath>
 				<directory>${basedir}</directory>
@@ -60,7 +57,6 @@
 					<include>LICENSE</include>
 				</includes>
 			</resource>
-			-->
 		</resources>
 	</build>
 </project>
