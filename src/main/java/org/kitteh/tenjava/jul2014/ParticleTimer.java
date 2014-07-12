@@ -38,6 +38,7 @@ import java.util.function.Consumer;
 final class ParticleTimer {
     public enum Particle {
         ANGRY_VILLAGER("angryVillager"),
+        HEART("heart", 10, 0),
         SPELL("spell", 50, 5),
         SPLASH("splash", 5, 0);
 

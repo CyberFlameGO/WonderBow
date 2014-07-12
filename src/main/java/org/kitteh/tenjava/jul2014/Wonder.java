@@ -58,7 +58,7 @@ final class Wonder<T extends Entity> {
         bawk.getWorld().strikeLightning(bawk.getLocation());
         bawk.remove();
     }), no());
-    private static final Wonder<EnderPearl> ENDERS = new Wonder<>(EnderPearl.class, 1); // BAD LUCK EH
+    private static final Wonder<EnderPearl> ENDERS = new Wonder<>(EnderPearl.class, 1, ender -> particles().addEffect(ParticleTimer.Particle.HEART, ender, -1, 1, no()), no()); // BAD LUCK EH
     private static final Wonder<WitherSkull> SKULL = new Wonder<>(WitherSkull.class, 1, no(), skull -> {
         Set<Player> nearbyPlayers = skull.getNearbyEntities(3, 3, 3).stream().filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toSet());
         if (!nearbyPlayers.isEmpty() && skull.hasMetadata("WonderShooter")) {
