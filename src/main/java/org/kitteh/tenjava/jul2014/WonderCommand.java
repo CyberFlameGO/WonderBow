@@ -53,7 +53,7 @@ public final class WonderCommand implements TabExecutor {
                         sender.sendMessage(ChatColor.AQUA + "You are " + (this.plugin.isWonderBow(player.getItemInHand()) ? "" : "not ") + "holding a WonderBow!");
                 }
             } else {
-                sender.sendMessage(ChatColor.RED+"Available commands: craft, test");
+                sender.sendMessage(ChatColor.RED + "Available commands: craft, test");
             }
         } else {
             sender.sendMessage("WonderBow commands only work for players");
@@ -63,8 +63,8 @@ public final class WonderCommand implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length <= 1){
-            return Arrays.asList("craft","test");
+        if (args.length <= 1) {
+            return Arrays.asList("craft", "test");
         }
         return null;
     }

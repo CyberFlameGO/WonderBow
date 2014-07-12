@@ -23,36 +23,71 @@
  */
 package org.kitteh.tenjava.jul2014;
 
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.util.Vector;
 
 class WonderListener implements Listener {
     private static final String WONDERMETA = "WonderBow";
-    private final MetadataValue metavalue;
     private final WonderBow plugin;
 
     WonderListener(WonderBow plugin) {
         this.plugin = plugin;
-        this.metavalue = new FixedMetadataValue(this.plugin, WONDERMETA);
     }
 
     @EventHandler
     public void onBowShoot(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player && this.plugin.isWonderBow(((Player) event.getEntity()).getItemInHand())) {
-            this.plugin.getServer().broadcastMessage("SHOT");
-            event.getProjectile().setMetadata(WONDERMETA, this.metavalue);
+            Wonder wonder = Wonder.getWonder();
+            Entity projectile = event.getProjectile();
+            if (!wonder.getEntityClass().isAssignableFrom(projectile.getClass())) {
+                event.setCancelled(true);
+                projectile = this.spawnWonder(wonder, projectile, (Player) event.getEntity());
+            }
+            projectile.setMetadata(WONDERMETA, new FixedMetadataValue(this.plugin, wonder));
         }
+    }
+
+    private <T extends Entity> Entity spawnWonder(Wonder<T> wonder, final Entity projectile, Player shooter) {
+        T newProjectile;
+        if (Projectile.class.isAssignableFrom(wonder.getEntityClass())) {
+            Wonder<Projectile> w = (Wonder<Projectile>) wonder;
+            newProjectile = (T) shooter.launchProjectile(w.getEntityClass());
+        } else {
+            Vector velocity = projectile.getVelocity();
+            Location current = projectile.getLocation();
+            Vector velocityUnit = velocity.normalize().multiply(3);
+
+            // Set location ahead
+            Location newLocation = current.clone();
+            newLocation.setX(current.getX() + velocityUnit.getX());
+            newLocation.setY(current.getY() + velocityUnit.getY());
+            newLocation.setZ(current.getZ() + velocityUnit.getZ());
+
+            newProjectile = shooter.getWorld().spawn(newLocation, wonder.getEntityClass());
+            newProjectile.setVelocity(projectile.getVelocity());
+        }
+        wonder.spawned(newProjectile);
+        return newProjectile;
     }
 
     @EventHandler
     public void onHit(ProjectileHitEvent event) {
-        if (event.getEntity().getMetadata(WONDERMETA).contains(this.metavalue)) {
-            this.plugin.getServer().broadcastMessage("HIT");
+        if (event.getEntity().hasMetadata(WONDERMETA)) {
+            for (MetadataValue value : event.getEntity().getMetadata(WONDERMETA)) {
+                if (value.getOwningPlugin().equals(this.plugin)) {
+                    this.plugin.getServer().broadcastMessage(value.value().toString());
+                    break;
+                }
+            }
         }
     }
 }
