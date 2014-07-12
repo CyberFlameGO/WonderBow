@@ -29,17 +29,20 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.kitteh.tenjava.jul2014.effects.ParticleTimer;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class WonderBow extends JavaPlugin {
     private ItemMeta metaBow;
+    private ParticleTimer particles;
 
     @Override
     public void onEnable() {
         this.getCommand("wonderbow").setExecutor(new WonderCommand(this));
         this.getServer().getPluginManager().registerEvents(new WonderListener(this), this);
+        this.particles = new ParticleTimer(this);
 
         // Create the WonderBow meta. This will be consistent and required.
         this.metaBow = this.getServer().getItemFactory().getItemMeta(Material.BOW);
@@ -72,6 +75,15 @@ public class WonderBow extends JavaPlugin {
         ItemStack bow = new ItemStack(Material.BOW);
         bow.setItemMeta(this.getNewMeta(creator));
         return bow;
+    }
+
+    /**
+     * Gets the particle timer.
+     *
+     * @return particle timer
+     */
+    public ParticleTimer getParticleTimer() {
+        return this.particles;
     }
 
     /**

@@ -44,7 +44,7 @@ class WonderListener implements Listener {
     }
 
     @EventHandler
-    public void onBowShoot(EntityShootBowEvent event) {
+    void onBowShoot(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player && this.plugin.isWonderBow(((Player) event.getEntity()).getItemInHand())) {
             Wonder wonder = Wonder.getWonder();
             Entity projectile = event.getProjectile();
@@ -80,7 +80,7 @@ class WonderListener implements Listener {
     }
 
     @EventHandler
-    public void onHit(ProjectileHitEvent event) {
+    void onHit(ProjectileHitEvent event) {
         if (event.getEntity().hasMetadata(WONDERMETA)) {
             for (MetadataValue value : event.getEntity().getMetadata(WONDERMETA)) {
                 if (value.getOwningPlugin().equals(this.plugin)) {

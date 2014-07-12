@@ -24,18 +24,24 @@
 package org.kitteh.tenjava.jul2014;
 
 import org.bukkit.entity.*;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.projectiles.ProjectileSource;
+import org.kitteh.tenjava.jul2014.effects.ParticleTimer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
-public class Wonder<T extends Entity> {
+class Wonder<T extends Entity> {
     private static final Random RANDOM = new Random();
     private static final List<Wonder<? extends Entity>> WONDERS = new ArrayList<>();
 
-    private static final Wonder<Chicken> CHICKEN = new Wonder<>(Chicken.class);
-    private static final Wonder<EnderPearl> ENDERS = new Wonder<>(EnderPearl.class, e -> e.setShooter(null), no());
+    private static final Wonder<Chicken> CHICKEN = new Wonder<>(Chicken.class, c -> JavaPlugin.getPlugin(WonderBow.class).getParticleTimer().addEffect(ParticleTimer.Particle.ANGRY_VILLAGER, c, 10, 5, e -> {
+        e.getWorld().strikeLightning(e.getLocation());
+        e.remove();
+    }), no());
+    private static final Wonder<EnderPearl> ENDERS = new Wonder<>(EnderPearl.class, e -> e.setShooter((ProjectileSource) null), no());
     private static final Wonder<WitherSkull> SKULL = new Wonder<>(WitherSkull.class);
     private static final Wonder<Fireball> FIRE = new Wonder<>(Fireball.class, no(), f -> f.getWorld().<Cow>spawn(f.getLocation(), Cow.class));
 
