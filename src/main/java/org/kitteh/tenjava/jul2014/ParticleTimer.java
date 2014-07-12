@@ -36,7 +36,7 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 final class ParticleTimer {
-    public enum Particle {
+    enum Particle {
         ANGRY_VILLAGER("angryVillager"),
         HEART("heart", 10, 0),
         LAVA("lava", 20, 0),
@@ -113,7 +113,7 @@ final class ParticleTimer {
     private final List<ParticleTrack> tracking = new LinkedList<>();
     private int tick = 0;
 
-    public ParticleTimer(WonderBow plugin) {
+    ParticleTimer(WonderBow plugin) {
         this.plugin = plugin;
         this.plugin.getServer().getScheduler().scheduleSyncRepeatingTask(this.plugin, new Runnable() {
             @Override
@@ -139,6 +139,16 @@ final class ParticleTimer {
         }, 1, 1);
     }
 
+    /**
+     * Adds an effect to the timer
+     *
+     * @param particle particle to display
+     * @param entity entity to display it on
+     * @param count how many times to display it
+     * @param frequency period of ticks between displays
+     * @param callback callback
+     * @param <T> entity type
+     */
     public <T extends Entity> void addEffect(Particle particle, T entity, int count, int frequency, Consumer<T> callback) {
         this.tracking.add(new ParticleTrack<>(entity, count, frequency, particle, callback));
     }
@@ -148,6 +158,14 @@ final class ParticleTimer {
         return random.nextFloat() * 2 + 1;
     }
 
+    /**
+     * Broadcasts a single effect at a location.
+     *
+     * @param name effect name
+     * @param location location
+     * @param data further data
+     * @param count number of particles
+     */
     public void broadcastEffect(String name, Location location, float data, int count) {
         PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(name, (float) location.getX(), (float) location.getY(), (float) location.getZ(), off(), off(), off(), data, count);
         for (Player player : this.plugin.getServer().getOnlinePlayers()) {

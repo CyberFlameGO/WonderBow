@@ -67,13 +67,13 @@ class WonderListener implements Listener {
         } else {
             Vector velocity = projectile.getVelocity();
             Location current = projectile.getLocation();
-            Vector velocityUnit = velocity.normalize().multiply(3);
+            Vector adjustment = velocity.normalize().multiply(3); // Shove in a direction so it doesn't collide with us
 
             // Set location ahead
             Location newLocation = current.clone();
-            newLocation.setX(current.getX() + velocityUnit.getX());
-            newLocation.setY(current.getY() + velocityUnit.getY());
-            newLocation.setZ(current.getZ() + velocityUnit.getZ());
+            newLocation.setX(current.getX() + adjustment.getX());
+            newLocation.setY(current.getY() + adjustment.getY());
+            newLocation.setZ(current.getZ() + adjustment.getZ());
 
             newProjectile = shooter.getWorld().spawn(newLocation, wonder.getEntityClass());
             newProjectile.setVelocity(projectile.getVelocity());
