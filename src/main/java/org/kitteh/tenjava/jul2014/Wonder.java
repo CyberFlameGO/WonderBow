@@ -58,7 +58,9 @@ final class Wonder<T extends Entity> {
     }
 
     private static final Wonder<Chicken> CHICKEN = new Wonder<>(Chicken.class, 1, chicken -> particles().addEffect(ParticleTimer.Particle.ANGRY_VILLAGER, chicken, 10, 5, bawk -> {
-        bawk.getWorld().strikeLightning(bawk.getLocation());
+        for(int i = 0;i<15; i++) {
+            bawk.getWorld().strikeLightning(bawk.getLocation().clone().add(RANDOM.nextDouble() * 4 + 2, RANDOM.nextDouble() * 4 + 2, RANDOM.nextDouble() * 4 + 2));
+        }
         bawk.remove();
     }), no());
     private static final Wonder<EnderPearl> ENDERS = new Wonder<>(EnderPearl.class, 1, ender -> particles().addEffect(ParticleTimer.Particle.HEART, ender, -1, 1, no()), no()); // BAD LUCK EH
