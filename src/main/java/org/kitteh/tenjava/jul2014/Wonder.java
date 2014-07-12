@@ -35,32 +35,69 @@ public class Wonder<T extends Entity> {
     private static final List<Wonder<? extends Entity>> WONDERS = new ArrayList<>();
 
     private static final Wonder<Chicken> CHICKEN = new Wonder<>(Chicken.class);
-    private static final Wonder<EnderPearl> ENDERS = new Wonder<>(EnderPearl.class, e -> e.setShooter(null));
+    private static final Wonder<EnderPearl> ENDERS = new Wonder<>(EnderPearl.class, e -> e.setShooter(null), no());
     private static final Wonder<WitherSkull> SKULL = new Wonder<>(WitherSkull.class);
-    private static final Wonder<Fireball> FIRE = new Wonder<>(Fireball.class);
+    private static final Wonder<Fireball> FIRE = new Wonder<>(Fireball.class, no(), f -> f.getWorld().<Cow>spawn(f.getLocation(), Cow.class));
 
+    /**
+     * Generates a consumer which does nothing.
+     *
+     * @param <T> Type to win!
+     * @return consumer of nothing
+     */
+    static <T> Consumer<T> no() {
+        return e -> {
+        };
+    }
+
+    /**
+     * Gets a random Wonder!
+     *
+     * @return a wonder
+     */
     public static Wonder getWonder() {
         return WONDERS.get(RANDOM.nextInt(WONDERS.size()));
     }
 
-    private final Consumer<T> spawnProcessor;
+    private final Consumer<T> processHit;
+    private final Consumer<T> processSpawn;
     private final Class<T> entityClass;
 
     private Wonder(Class<T> entityClass) {
-        this(entityClass, e -> {});
+        this(entityClass, no(), no());
     }
 
-    private Wonder(Class<T> entityClass, Consumer<T> spawnProcessor) {
-        this.spawnProcessor = spawnProcessor;
+    private Wonder(Class<T> entityClass, Consumer<T> processSpawn, Consumer<T> processHit) {
+        this.processHit = processHit;
+        this.processSpawn = processSpawn;
         this.entityClass = entityClass;
         WONDERS.add(this);
     }
 
+    /**
+     * Gets the class to be spawned for this Wonder.
+     *
+     * @return spawning class
+     */
     public Class<T> getEntityClass() {
         return this.entityClass;
     }
 
-    public void spawned(T entity) {
-        this.spawnProcessor.accept(entity);
+    /**
+     * Process a wonder-spawned entity being hit.
+     *
+     * @param entity entity
+     */
+    void onHit(T entity) {
+        this.processHit.accept(entity);
+    }
+
+    /**
+     * Process a wonder-spawned entity being spawned.
+     *
+     * @param entity spawned entity
+     */
+    void onSpawn(T entity) {
+        this.processSpawn.accept(entity);
     }
 }

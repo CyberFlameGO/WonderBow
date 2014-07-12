@@ -75,7 +75,7 @@ class WonderListener implements Listener {
             newProjectile = shooter.getWorld().spawn(newLocation, wonder.getEntityClass());
             newProjectile.setVelocity(projectile.getVelocity());
         }
-        wonder.spawned(newProjectile);
+        wonder.onSpawn(newProjectile);
         return newProjectile;
     }
 
@@ -84,7 +84,8 @@ class WonderListener implements Listener {
         if (event.getEntity().hasMetadata(WONDERMETA)) {
             for (MetadataValue value : event.getEntity().getMetadata(WONDERMETA)) {
                 if (value.getOwningPlugin().equals(this.plugin)) {
-                    this.plugin.getServer().broadcastMessage(value.value().toString());
+                    Wonder wonder = (Wonder)value.value();
+                    wonder.onHit(event.getEntity());
                     break;
                 }
             }
