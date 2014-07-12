@@ -21,7 +21,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.kitteh.tenjava.jul2014.effects;
+package org.kitteh.tenjava.jul2014;
 
 import net.minecraft.server.v1_7_R3.PacketPlayOutWorldParticles;
 import org.bukkit.Location;

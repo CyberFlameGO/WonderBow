@@ -29,7 +29,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.kitteh.tenjava.jul2014.effects.ParticleTimer;
 
 import java.util.Arrays;
 import java.util.List;
