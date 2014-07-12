@@ -47,6 +47,7 @@ import java.util.stream.Collectors;
 class Wonder<T extends Entity> {
     private static final Random RANDOM = new Random();
     private static final List<Wonder<? extends Entity>> WONDERS = new ArrayList<>();
+    private static final String MOST_WITHERED = ChatColor.GOLD + "Most Withered: ";
 
     private static ParticleTimer particles() {
         return JavaPlugin.getPlugin(WonderBow.class).getParticleTimer();
@@ -66,17 +67,17 @@ class Wonder<T extends Entity> {
             boolean set = false;
             for (int i = 0; i < lore.size(); i++) {
                 String string = lore.get(i);
-                if (string.startsWith(ChatColor.GOLD + "Most Withered: ")) {
-                    int count = Integer.parseInt(string.substring((ChatColor.GOLD + "Most Withered: ").length()));
+                if (string.startsWith(MOST_WITHERED)) {
+                    int count = Integer.parseInt(string.substring((MOST_WITHERED).length()));
                     if (count < nearbyPlayers.size()) {
-                        lore.set(i, ChatColor.GOLD + "Most Withered: " + nearbyPlayers.size());
+                        lore.set(i, MOST_WITHERED + nearbyPlayers.size());
                     }
                     set = true;
                     break;
                 }
             }
             if (!set) {
-                lore.add(ChatColor.GOLD + "Most Withered: " + nearbyPlayers.size());
+                lore.add(MOST_WITHERED + nearbyPlayers.size());
             }
             meta.setLore(lore);
             shooter.setItemMeta(meta);
