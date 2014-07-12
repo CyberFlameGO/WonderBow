@@ -83,13 +83,11 @@ class Wonder<T extends Entity> {
         }
         nearbyPlayers.forEach(player -> player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 200, 1, true)));
     });
-    private static final Wonder<Fireball> FIRE = new Wonder<>(Fireball.class, no(), fireball -> {
-        particles().addEffect(ParticleTimer.Particle.SPLASH, fireball.getWorld().spawn(fireball.getLocation(), Cow.class), 40, 1, cow -> {
-            cow.getWorld().createExplosion(cow.getLocation().getX(), cow.getLocation().getY(), cow.getLocation().getZ(), 3, false, false);
-            cow.getLocation().add(0, 1, 0).getBlock().setType(Material.WATER);
-            cow.remove();
-        });
-    });
+    private static final Wonder<Fireball> FIRE = new Wonder<>(Fireball.class, no(), fireball -> particles().addEffect(ParticleTimer.Particle.SPLASH, fireball.getWorld().spawn(fireball.getLocation(), Cow.class), 40, 1, cow -> {
+        cow.getWorld().createExplosion(cow.getLocation().getX(), cow.getLocation().getY(), cow.getLocation().getZ(), 3, false, false);
+        cow.getLocation().add(0, 1, 0).getBlock().setType(Material.WATER);
+        cow.remove();
+    }));
     private static final Wonder<Arrow> ARROW = new Wonder<>(Arrow.class); // Boring!
 
     /**

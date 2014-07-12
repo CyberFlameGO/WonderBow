@@ -86,7 +86,7 @@ class WonderListener implements Listener {
         if (event.getEntity().hasMetadata(WONDERMETA)) {
             for (MetadataValue value : event.getEntity().getMetadata(WONDERMETA)) {
                 if (value.getOwningPlugin().equals(this.plugin)) {
-                    Wonder wonder = (Wonder)value.value();
+                    Wonder wonder = (Wonder) value.value();
                     wonder.onHit(event.getEntity());
                     break;
                 }

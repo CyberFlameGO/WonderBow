@@ -28,7 +28,6 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.kitteh.tenjava.jul2014.WonderBow;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -137,7 +136,7 @@ public class ParticleTimer {
     }
 
     public <T extends Entity> void addEffect(Particle particle, T entity, int count, int frequency, Consumer<T> callback) {
-        this.tracking.add(new ParticleTrack<T>(entity, count, frequency, particle, callback));
+        this.tracking.add(new ParticleTrack<>(entity, count, frequency, particle, callback));
     }
 
     private float off() {
