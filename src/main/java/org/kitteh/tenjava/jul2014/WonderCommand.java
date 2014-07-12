@@ -30,11 +30,10 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 public final class WonderCommand implements TabExecutor {
-    private WonderBow plugin;
+    private final WonderBow plugin;
 
     WonderCommand(WonderBow plugin) {
         this.plugin = plugin;

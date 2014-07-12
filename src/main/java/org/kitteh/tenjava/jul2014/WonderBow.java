@@ -39,6 +39,7 @@ public class WonderBow extends JavaPlugin {
     @Override
     public void onEnable() {
         this.getCommand("wonderbow").setExecutor(new WonderCommand(this));
+        this.getServer().getPluginManager().registerEvents(new WonderListener(this), this);
 
         // Create the WonderBow meta. This will be consistent and required.
         this.metaBow = this.getServer().getItemFactory().getItemMeta(Material.BOW);
