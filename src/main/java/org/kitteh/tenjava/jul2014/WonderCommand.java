@@ -23,11 +23,17 @@
  */
 package org.kitteh.tenjava.jul2014;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
 
-public final class WonderCommand implements CommandExecutor {
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+public final class WonderCommand implements TabExecutor {
     private WonderBow plugin;
 
     WonderCommand(WonderBow plugin) {
@@ -36,6 +42,31 @@ public final class WonderCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        return false;
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            if (args.length > 0) {
+                switch (args[0]) {
+                    case "craft":
+                        player.getInventory().addItem(this.plugin.getNewWonderBow(player.getName()));
+                        sender.sendMessage(ChatColor.AQUA + "WonderBow granted!");
+                        break;
+                    case "test":
+                        sender.sendMessage(ChatColor.AQUA + "You are " + (this.plugin.isWonderBow(player.getItemInHand()) ? "" : "not ") + "holding a WonderBow!");
+                }
+            } else {
+                sender.sendMessage(ChatColor.RED+"Available commands: craft, test");
+            }
+        } else {
+            sender.sendMessage("WonderBow commands only work for players");
+        }
+        return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length <= 1){
+            return Arrays.asList("craft","test");
+        }
+        return null;
     }
 }
