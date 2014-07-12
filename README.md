@@ -34,3 +34,14 @@ Usage
 1. Install plugin.
 2. Grant yourself the perm node wonderbow.wonderbow.wonderbow, or just give yourself OP.
 3) Enjoy the wonderbow! Try not to die.
+
+---------------------------------------
+
+BOW FEATURES
+------------
+
+* THUNDERCHICKEN
+* WET COWBOMB
+* WITHER BLAST (with record keeping! Check your item after a successful hit on another player!)
+* CONFUSION ARROW (with record keeping! Check your item after a successful hit on another player!)
+* ENDER PEARL OF NO SPECIAL EFFECTS! Impress your enemies by teleporting right on top of them!
