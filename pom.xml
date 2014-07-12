@@ -4,7 +4,7 @@
     <groupId>org.kitteh.tenjava</groupId>
     <artifactId>tenjava-july-2014</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>CAT_PLUGIN</name>
+    <name>WonderBow</name>
     <description>mbaxter's July 2014 ten.java plugin</description>
 
     <properties>
@@ -29,7 +29,7 @@
 
     <build>
         <defaultGoal>clean package</defaultGoal>
-        <finalName>mbaxter_tenjava</finalName>
+        <finalName>wonderbow</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

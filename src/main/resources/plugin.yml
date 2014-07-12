@@ -1,3 +1,14 @@
-name: mbax-t3
-main: org.kitteh.tenjava.jul2014.CatPlugin
+name: WonderBow
+main: org.kitteh.tenjava.jul2014.WonderBow
 version: '${project.version}'
+description: The bow that does it all!
+commands:
+  wonderbow:
+    description: Wonderbow debug commands
+    usage: /<command> stuff
+    permission: wonderbow.wonderbow.wonderbow
+    permission-message: You cannot into WonderBow
+permissions:
+  wonderbow.wonderbow.wonderbow:
+    default: op
+    description: WONDERBOW WONDERBOW WONDERBOW

@@ -25,9 +25,9 @@ package org.kitteh.tenjava.jul2014;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class CatPlugin extends JavaPlugin {
+public class WonderBow extends JavaPlugin {
     @Override
     public void onEnable() {
-        // TODO write plugin
+        this.getCommand("wonderbow").setExecutor(new WonderCommand(this));
     }
 }
