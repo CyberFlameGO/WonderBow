@@ -5,10 +5,8 @@ description: The bow that does it all!
 commands:
   wonderbow:
     description: Wonderbow debug commands
-    usage: /<command> stuff
-    permission: wonderbow.wonderbow.wonderbow
-    permission-message: You cannot into WonderBow
+    usage: For options, type /wonderbow
 permissions:
-  wonderbow.wonderbow.wonderbow:
+  wonderbow.command.craft:
     default: op
-    description: WONDERBOW WONDERBOW WONDERBOW
+    description: Ability to craft a WonderBow from command

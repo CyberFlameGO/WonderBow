@@ -46,15 +46,21 @@ public final class WonderCommand implements TabExecutor {
             if (args.length > 0) {
                 switch (args[0]) {
                     case "craft":
+                        if (!sender.hasPermission("wonderbow.command.craft")) {
+                            sender.sendMessage(ChatColor.RED + "Access denied");
+                            return true;
+                        }
                         player.getInventory().addItem(this.plugin.getNewWonderBow(player.getName()));
                         player.getInventory().addItem(this.plugin.getNewWonderBro());
-                        sender.sendMessage(ChatColor.AQUA + "WonderBow granted!");
+                        sender.sendMessage(ChatColor.AQUA + "WonderBow craft!");
                         break;
-                    case "test":
-                        sender.sendMessage(ChatColor.AQUA + "You are " + (this.plugin.isWonderBow(player.getItemInHand()) ? "" : "not ") + "holding a WonderBow!");
                 }
             } else {
-                sender.sendMessage(ChatColor.RED + "Available commands: craft, test");
+                if (sender.hasPermission("wonderbow.command.craft")) {
+                    sender.sendMessage(ChatColor.RED + "Available commands: craft");
+                } else {
+                    sender.sendMessage(ChatColor.RED + "You cannot into WonderBow");
+                }
             }
         } else {
             sender.sendMessage("WonderBow commands only work for players");
@@ -65,7 +71,7 @@ public final class WonderCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if (args.length <= 1) {
-            return Arrays.asList("craft", "test");
+            return Arrays.asList("craft");
         }
         return null;
     }
