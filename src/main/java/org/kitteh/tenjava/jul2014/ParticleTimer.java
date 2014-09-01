@@ -87,16 +87,8 @@ final class ParticleTimer {
             this.particle = particle;
         }
 
-        private Consumer<T> getCallback() {
-            return this.callback;
-        }
-
         private T getEntity() {
             return this.entity;
-        }
-
-        private int count() {
-            return count > 0 ? --count : count;
         }
 
         private int getFrequency() {
@@ -105,6 +97,14 @@ final class ParticleTimer {
 
         private Particle getParticle() {
             return this.particle;
+        }
+
+        private boolean isFinished() {
+            if (this.count > 0 && this.count-- == 0) {
+                this.callback.accept(this.entity);
+                return true;
+            }
+            return false;
         }
     }
 
@@ -129,8 +129,7 @@ final class ParticleTimer {
                     int frequency = t.getFrequency();
                     if (frequency <= 1 || tick % frequency == 0) {
                         broadcastEffect(t.getParticle().toString(), t.getEntity().getLocation(), t.getParticle().getData(), t.getParticle().getCount());
-                        if (t.count() == 0) {
-                            t.getCallback().accept(t.getEntity());
+                        if (t.isFinished()) {
                             iterator.remove();
                         }
                     }
@@ -146,16 +145,11 @@ final class ParticleTimer {
      * @param entity entity to display it on
      * @param count how many times to display it
      * @param frequency period of ticks between displays
-     * @param callback callback
+     * @param callback callback executed when the count runs out if count > 0
      * @param <T> entity type
      */
     public <T extends Entity> void addEffect(Particle particle, T entity, int count, int frequency, Consumer<T> callback) {
         this.tracking.add(new ParticleTrack<>(entity, count, frequency, particle, callback));
-    }
-
-    // Offset generation
-    private float off() {
-        return random.nextFloat() * 2 + 1;
     }
 
     /**
@@ -173,5 +167,10 @@ final class ParticleTimer {
                 ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
             }
         }
+    }
+
+    // Offset generation
+    private float off() {
+        return random.nextFloat() * 2 + 1;
     }
 }
