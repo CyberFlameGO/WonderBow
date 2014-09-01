@@ -48,13 +48,53 @@ import java.util.stream.Collectors;
  * @param <T> Entity type of this particular Wonder
  */
 final class Wonder<T extends Entity> {
+    private enum Record {
+        MOST_CONFUSED("Most Confused"),
+        MOST_WITHERED("Most Withered");
+
+        private final String loreLine;
+
+        private Record(String loreLine) {
+            this.loreLine = ChatColor.GOLD + loreLine + ": ";
+        }
+
+        private String getLoreLine() {
+            return this.loreLine;
+        }
+    }
+
     private static final Random RANDOM = new Random();
     private static final List<Wonder<? extends Entity>> WONDERS = new ArrayList<>();
-    private static final String MOST_WITHERED = ChatColor.GOLD + "Most Withered: ";
-    private static final String MOST_CONFUSED = ChatColor.GOLD + "Most Confused: ";
+
+    private static Set<Player> getNearbyPlayers(Entity entity, int range) {
+        return entity.getNearbyEntities(range, range, range).stream().filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toSet());
+    }
 
     private static ParticleTimer particles() {
         return JavaPlugin.getPlugin(WonderBow.class).getParticleTimer();
+    }
+
+    private static void record(Record record, ItemStack stack, int score) {
+        ItemMeta meta = stack.getItemMeta();
+        List<String> lore = meta.getLore();
+        boolean set = false;
+        final String loreLine = record.getLoreLine();
+        for (int i = 0; i < lore.size(); i++) {
+            String string = lore.get(i);
+            if (string.startsWith(loreLine)) {
+                int count = Integer.parseInt(string.substring((loreLine).length()));
+                if (count < score) {
+                    lore.set(i, loreLine + score);
+                }
+                set = true;
+                break;
+            }
+        }
+        if (!set) {
+            lore.add(loreLine + score);
+        }
+        meta.setLore(lore);
+        stack.setItemMeta(meta);
     }
 
     private static final Wonder<Chicken> CHICKEN = new Wonder<>(Chicken.class, 1, chicken -> particles().addEffect(ParticleTimer.Particle.ANGRY_VILLAGER, chicken, 10, 5, bawk -> {
@@ -65,28 +105,9 @@ final class Wonder<T extends Entity> {
     }), no());
     private static final Wonder<EnderPearl> ENDERS = new Wonder<>(EnderPearl.class, 1, ender -> particles().addEffect(ParticleTimer.Particle.HEART, ender, -1, 1, no()), no()); // BAD LUCK EH
     private static final Wonder<WitherSkull> SKULL = new Wonder<>(WitherSkull.class, 1, no(), skull -> {
-        Set<Player> nearbyPlayers = skull.getNearbyEntities(3, 3, 3).stream().filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toSet());
+        Set<Player> nearbyPlayers = getNearbyPlayers(skull, 3);
         if (!nearbyPlayers.isEmpty() && skull.hasMetadata("WonderShooter")) {
-            ItemStack shooter = (ItemStack) skull.getMetadata("WonderShooter").get(0).value();
-            ItemMeta meta = shooter.getItemMeta();
-            List<String> lore = meta.getLore();
-            boolean set = false;
-            for (int i = 0; i < lore.size(); i++) {
-                String string = lore.get(i);
-                if (string.startsWith(MOST_WITHERED)) {
-                    int count = Integer.parseInt(string.substring((MOST_WITHERED).length()));
-                    if (count < nearbyPlayers.size()) {
-                        lore.set(i, MOST_WITHERED + nearbyPlayers.size());
-                    }
-                    set = true;
-                    break;
-                }
-            }
-            if (!set) {
-                lore.add(MOST_WITHERED + nearbyPlayers.size());
-            }
-            meta.setLore(lore);
-            shooter.setItemMeta(meta);
+            record(Record.MOST_WITHERED, (ItemStack) skull.getMetadata("WonderShooter").get(0).value(), nearbyPlayers.size());
         }
         nearbyPlayers.forEach(player -> player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 200, 1, true)));
     });
@@ -96,28 +117,9 @@ final class Wonder<T extends Entity> {
         cow.remove();
     }));
     private static final Wonder<Arrow> ARROW = new Wonder<>(Arrow.class, 2, arrow -> particles().addEffect(ParticleTimer.Particle.SPELL, arrow, -1, 1, no()), arrow -> {
-        Set<Player> nearbyPlayers = arrow.getNearbyEntities(5, 5, 5).stream().filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toSet());
+        Set<Player> nearbyPlayers = getNearbyPlayers(arrow, 5);
         if (!nearbyPlayers.isEmpty() && arrow.hasMetadata("WonderShooter")) {
-            ItemStack shooter = (ItemStack) arrow.getMetadata("WonderShooter").get(0).value();
-            ItemMeta meta = shooter.getItemMeta();
-            List<String> lore = meta.getLore();
-            boolean set = false;
-            for (int i = 0; i < lore.size(); i++) {
-                String string = lore.get(i);
-                if (string.startsWith(MOST_CONFUSED)) {
-                    int count = Integer.parseInt(string.substring((MOST_CONFUSED).length()));
-                    if (count < nearbyPlayers.size()) {
-                        lore.set(i, MOST_CONFUSED + nearbyPlayers.size());
-                    }
-                    set = true;
-                    break;
-                }
-            }
-            if (!set) {
-                lore.add(MOST_CONFUSED + nearbyPlayers.size());
-            }
-            meta.setLore(lore);
-            shooter.setItemMeta(meta);
+            record(Record.MOST_CONFUSED, (ItemStack) arrow.getMetadata("WonderShooter").get(0).value(), nearbyPlayers.size());
         }
         nearbyPlayers.forEach(player -> player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 4, true)));
         arrow.remove();
