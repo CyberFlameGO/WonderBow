@@ -144,7 +144,7 @@ final class Wonder<T extends Entity> {
      * @return consumer of nothing
      */
     static <T> Consumer<T> no() {
-        return e -> {
+        return t -> {
         };
     }
 
